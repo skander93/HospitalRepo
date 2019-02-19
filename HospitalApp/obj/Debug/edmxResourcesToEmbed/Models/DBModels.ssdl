@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="File">
+    <Key>
+      <PropertyRef Name="pk" />
+    </Key>
+    <Property Name="pk" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Surgeons">
+    <Key>
+      <PropertyRef Name="pk" />
+    </Key>
+    <Property Name="pk" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="id" Type="int" Nullable="false" />
+    <Property Name="lastName" Type="nvarchar" MaxLength="50" />
+    <Property Name="firstName" Type="nvarchar" MaxLength="50" />
+    <Property Name="fileId" Type="int" />
+  </EntityType>
+  <EntityType Name="Surgeries">
+    <Key>
+      <PropertyRef Name="pk" />
+    </Key>
+    <Property Name="pk" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="id" Type="int" Nullable="false" />
+    <Property Name="entryDate" Type="datetime" />
+    <Property Name="exitDate" Type="datetime" />
+    <Property Name="plannedDuration" Type="int" />
+    <Property Name="status" Type="nvarchar" MaxLength="50" />
+    <Property Name="surgeonId" Type="int" />
+    <Property Name="fileId" Type="int" />
+  </EntityType>
+  <Association Name="FK_file">
+    <End Role="File" Type="Self.File" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Surgeons" Type="Self.Surgeons" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="File">
+        <PropertyRef Name="pk" />
+      </Principal>
+      <Dependent Role="Surgeons">
+        <PropertyRef Name="fileId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_file_surgeries">
+    <End Role="File" Type="Self.File" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Surgeries" Type="Self.Surgeries" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="File">
+        <PropertyRef Name="pk" />
+      </Principal>
+      <Dependent Role="Surgeries">
+        <PropertyRef Name="fileId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ModelStoreContainer">
+    <EntitySet Name="File" EntityType="Self.File" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Surgeons" EntityType="Self.Surgeons" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Surgeries" EntityType="Self.Surgeries" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_file" Association="Self.FK_file">
+      <End Role="File" EntitySet="File" />
+      <End Role="Surgeons" EntitySet="Surgeons" />
+    </AssociationSet>
+    <AssociationSet Name="FK_file_surgeries" Association="Self.FK_file_surgeries">
+      <End Role="File" EntitySet="File" />
+      <End Role="Surgeries" EntitySet="Surgeries" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

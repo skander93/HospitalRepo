@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Datatables.Bootstrap4.Mvc</id>
+    <version>1.10.18</version>
+    <title>Datatables Bootstrap4 for Mvc</title>
+    <authors>Vaduga</authors>
+    <owners>Vaduga</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Only datatables for bootstrap4 MVC VS Template</description>
+    <summary />
+    <dependencies>
+      <dependency id="Bootstrap" version="4.0.0" />
+    </dependencies>
+  </metadata>
+</package>

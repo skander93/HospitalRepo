@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="File">
+    <Key>
+      <PropertyRef Name="pk" />
+    </Key>
+    <Property Name="pk" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Surgeons" Relationship="Self.FK_file" FromRole="File" ToRole="Surgeons" />
+    <NavigationProperty Name="Surgeries" Relationship="Self.FK_file_surgeries" FromRole="File" ToRole="Surgeries" />
+  </EntityType>
+  <EntityType Name="Surgeons">
+    <Key>
+      <PropertyRef Name="pk" />
+    </Key>
+    <Property Name="pk" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="id" Type="Int32" Nullable="false" />
+    <Property Name="lastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="firstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fileId" Type="Int32" />
+    <NavigationProperty Name="File" Relationship="Self.FK_file" FromRole="Surgeons" ToRole="File" />
+  </EntityType>
+  <EntityType Name="Surgeries">
+    <Key>
+      <PropertyRef Name="pk" />
+    </Key>
+    <Property Name="pk" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="id" Type="Int32" Nullable="false" />
+    <Property Name="entryDate" Type="DateTime" Precision="3" />
+    <Property Name="exitDate" Type="DateTime" Precision="3" />
+    <Property Name="plannedDuration" Type="Int32" />
+    <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="surgeonId" Type="Int32" />
+    <Property Name="fileId" Type="Int32" />
+    <NavigationProperty Name="File" Relationship="Self.FK_file_surgeries" FromRole="Surgeries" ToRole="File" />
+  </EntityType>
+  <Association Name="FK_file">
+    <End Role="File" Type="Self.File" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Surgeons" Type="Self.Surgeons" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="File">
+        <PropertyRef Name="pk" />
+      </Principal>
+      <Dependent Role="Surgeons">
+        <PropertyRef Name="fileId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_file_surgeries">
+    <End Role="File" Type="Self.File" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Surgeries" Type="Self.Surgeries" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="File">
+        <PropertyRef Name="pk" />
+      </Principal>
+      <Dependent Role="Surgeries">
+        <PropertyRef Name="fileId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DBModels" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="File" EntityType="Self.File" />
+    <EntitySet Name="Surgeons" EntityType="Self.Surgeons" />
+    <EntitySet Name="Surgeries" EntityType="Self.Surgeries" />
+    <AssociationSet Name="FK_file" Association="Self.FK_file">
+      <End Role="File" EntitySet="File" />
+      <End Role="Surgeons" EntitySet="Surgeons" />
+    </AssociationSet>
+    <AssociationSet Name="FK_file_surgeries" Association="Self.FK_file_surgeries">
+      <End Role="File" EntitySet="File" />
+      <End Role="Surgeries" EntitySet="Surgeries" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

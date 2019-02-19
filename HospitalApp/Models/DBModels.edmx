@@ -1,0 +1,221 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="File">
+          <Key>
+            <PropertyRef Name="pk" />
+          </Key>
+          <Property Name="pk" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Surgeons">
+          <Key>
+            <PropertyRef Name="pk" />
+          </Key>
+          <Property Name="pk" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="lastName" Type="nvarchar" MaxLength="50" />
+          <Property Name="firstName" Type="nvarchar" MaxLength="50" />
+          <Property Name="fileId" Type="int" />
+        </EntityType>
+        <EntityType Name="Surgeries">
+          <Key>
+            <PropertyRef Name="pk" />
+          </Key>
+          <Property Name="pk" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="entryDate" Type="datetime" />
+          <Property Name="exitDate" Type="datetime" />
+          <Property Name="plannedDuration" Type="int" />
+          <Property Name="status" Type="nvarchar" MaxLength="50" />
+          <Property Name="surgeonId" Type="int" />
+          <Property Name="fileId" Type="int" />
+        </EntityType>
+        <Association Name="FK_file">
+          <End Role="File" Type="Self.File" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Surgeons" Type="Self.Surgeons" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="File">
+              <PropertyRef Name="pk" />
+            </Principal>
+            <Dependent Role="Surgeons">
+              <PropertyRef Name="fileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_file_surgeries">
+          <End Role="File" Type="Self.File" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Surgeries" Type="Self.Surgeries" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="File">
+              <PropertyRef Name="pk" />
+            </Principal>
+            <Dependent Role="Surgeries">
+              <PropertyRef Name="fileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ModelStoreContainer">
+          <EntitySet Name="File" EntityType="Self.File" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Surgeons" EntityType="Self.Surgeons" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Surgeries" EntityType="Self.Surgeries" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_file" Association="Self.FK_file">
+            <End Role="File" EntitySet="File" />
+            <End Role="Surgeons" EntitySet="Surgeons" />
+          </AssociationSet>
+          <AssociationSet Name="FK_file_surgeries" Association="Self.FK_file_surgeries">
+            <End Role="File" EntitySet="File" />
+            <End Role="Surgeries" EntitySet="Surgeries" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="File">
+          <Key>
+            <PropertyRef Name="pk" />
+          </Key>
+          <Property Name="pk" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Surgeons" Relationship="Self.FK_file" FromRole="File" ToRole="Surgeons" />
+          <NavigationProperty Name="Surgeries" Relationship="Self.FK_file_surgeries" FromRole="File" ToRole="Surgeries" />
+        </EntityType>
+        <EntityType Name="Surgeons">
+          <Key>
+            <PropertyRef Name="pk" />
+          </Key>
+          <Property Name="pk" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="lastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="firstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="fileId" Type="Int32" />
+          <NavigationProperty Name="File" Relationship="Self.FK_file" FromRole="Surgeons" ToRole="File" />
+        </EntityType>
+        <EntityType Name="Surgeries">
+          <Key>
+            <PropertyRef Name="pk" />
+          </Key>
+          <Property Name="pk" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="entryDate" Type="DateTime" Precision="3" />
+          <Property Name="exitDate" Type="DateTime" Precision="3" />
+          <Property Name="plannedDuration" Type="Int32" />
+          <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="surgeonId" Type="Int32" />
+          <Property Name="fileId" Type="Int32" />
+          <NavigationProperty Name="File" Relationship="Self.FK_file_surgeries" FromRole="Surgeries" ToRole="File" />
+        </EntityType>
+        <Association Name="FK_file">
+          <End Role="File" Type="Self.File" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Surgeons" Type="Self.Surgeons" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="File">
+              <PropertyRef Name="pk" />
+            </Principal>
+            <Dependent Role="Surgeons">
+              <PropertyRef Name="fileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_file_surgeries">
+          <End Role="File" Type="Self.File" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Surgeries" Type="Self.Surgeries" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="File">
+              <PropertyRef Name="pk" />
+            </Principal>
+            <Dependent Role="Surgeries">
+              <PropertyRef Name="fileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DBModels" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="File" EntityType="Self.File" />
+          <EntitySet Name="Surgeons" EntityType="Self.Surgeons" />
+          <EntitySet Name="Surgeries" EntityType="Self.Surgeries" />
+          <AssociationSet Name="FK_file" Association="Self.FK_file">
+            <End Role="File" EntitySet="File" />
+            <End Role="Surgeons" EntitySet="Surgeons" />
+          </AssociationSet>
+          <AssociationSet Name="FK_file_surgeries" Association="Self.FK_file_surgeries">
+            <End Role="File" EntitySet="File" />
+            <End Role="Surgeries" EntitySet="Surgeries" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="DBModels">
+          <EntitySetMapping Name="File">
+            <EntityTypeMapping TypeName="Model.File">
+              <MappingFragment StoreEntitySet="File">
+                <ScalarProperty Name="pk" ColumnName="pk" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Surgeons">
+            <EntityTypeMapping TypeName="Model.Surgeons">
+              <MappingFragment StoreEntitySet="Surgeons">
+                <ScalarProperty Name="pk" ColumnName="pk" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="lastName" ColumnName="lastName" />
+                <ScalarProperty Name="firstName" ColumnName="firstName" />
+                <ScalarProperty Name="fileId" ColumnName="fileId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Surgeries">
+            <EntityTypeMapping TypeName="Model.Surgeries">
+              <MappingFragment StoreEntitySet="Surgeries">
+                <ScalarProperty Name="pk" ColumnName="pk" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="entryDate" ColumnName="entryDate" />
+                <ScalarProperty Name="exitDate" ColumnName="exitDate" />
+                <ScalarProperty Name="plannedDuration" ColumnName="plannedDuration" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="surgeonId" ColumnName="surgeonId" />
+                <ScalarProperty Name="fileId" ColumnName="fileId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

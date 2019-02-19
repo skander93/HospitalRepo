@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="DBModels">
+    <EntitySetMapping Name="File">
+      <EntityTypeMapping TypeName="Model.File">
+        <MappingFragment StoreEntitySet="File">
+          <ScalarProperty Name="pk" ColumnName="pk" />
+          <ScalarProperty Name="name" ColumnName="name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Surgeons">
+      <EntityTypeMapping TypeName="Model.Surgeons">
+        <MappingFragment StoreEntitySet="Surgeons">
+          <ScalarProperty Name="pk" ColumnName="pk" />
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="lastName" ColumnName="lastName" />
+          <ScalarProperty Name="firstName" ColumnName="firstName" />
+          <ScalarProperty Name="fileId" ColumnName="fileId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Surgeries">
+      <EntityTypeMapping TypeName="Model.Surgeries">
+        <MappingFragment StoreEntitySet="Surgeries">
+          <ScalarProperty Name="pk" ColumnName="pk" />
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="entryDate" ColumnName="entryDate" />
+          <ScalarProperty Name="exitDate" ColumnName="exitDate" />
+          <ScalarProperty Name="plannedDuration" ColumnName="plannedDuration" />
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="surgeonId" ColumnName="surgeonId" />
+          <ScalarProperty Name="fileId" ColumnName="fileId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

@@ -1,0 +1,126 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Analysis</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+
+    <script src="~/scripts/jquery-3.3.1.min.js"></script>
+    <script src="~/scripts/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.1/xlsx.full.min.js"></script>
+    <script src="http://oss.sheetjs.com/js-xlsx/jszip.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.min.js"></script>
+    <script src="~/scripts/ImportData.js"></script>
+    <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-datatables/0.6.0/angular-datatables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+                $('#dataSurgeries').DataTable({
+                    "ajax": {
+                        "url": "/Home/GetData",
+                        "type": "GET",
+                        "datatype": "JSON",
+                        "dataSrc": function (json) {
+                            //Make your callback here.
+                            json.data.forEach(function (element) {
+                                myDate = new Date(element.exitDate.match(/\d+/)[0] * 1);
+                                element.exitDate = myDate.toUTCString();
+                                myDate2 = new Date(element.entryDate.match(/\d+/)[0] * 1);
+                                element.entryDate = myDate2.toUTCString();
+                            });
+                            return json.data;
+                        }
+                    },
+                    "columns": [
+
+                        { "data": "lastName" },
+                        { "data": "firstName" },
+                        { "data": "entryDate" },
+                        { "data": "exitDate" },
+                        { "data": "plannedDuration" },
+                        { "data": "status" }
+
+                    ],
+                    "bSort": false
+                });
+                //$( "#searchBtn" ).click(function() {
+                //    $('#dataSurgeries').dataTable().fnClearTable();
+                //});
+        });
+    </script>
+</head>
+
+
+<body ng-app="MyApp">
+    <div class="container py-4" ng-controller="MyController">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5>Filter Surgeries List</h5>
+            </div>
+            <div class="card-body">
+                <div class="col-md-12">
+                    <div class="form">
+                        <div class="form-group">
+                            <input type="text" name="lastName" class="form-control col-md-2" ng-model=" lastName" placeholder="Last Name" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="firstName" class="form-control col-md-2" ng-model="firstName" placeholder="First Name" />
+                        </div>
+                        <div class="form-group">
+                            <input type="date" name="entryDate" class="form-control col-md-2" ng-model="entryDate" placeholder="Entry Date" />
+                        </div>
+                        <div class="form-group">
+                            <input type="date" name="exitDate" class="form-control col-md-2" ng-model="exitDate" placeholder="Exit Date" />
+                        </div>
+                        <div class="input-group-append">
+                            <button id="searchBtn" style="margin-bottom:10px;" class="btn btn-primary col-md-2 rounded-0" type="button" ng-click="FilterData()"><i class="fa fa-search"></i> Search</button>
+                        </div>
+                    </div>
+                    <span class="text-success">
+                        {{Message3}}
+                        <br />
+                        {{Message}}
+                        <br />
+                        {{Message2}}
+                    </span>
+                </div>
+
+                <table id="dataSurgeries" datatable="ng"  class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+
+                            <th>Last Name</th>
+                            <th>First Name</th>
+                            <th>Entry Date</th>
+                            <th>Exit Date</th>
+                            <th>PlannedDuration</th>
+                            <th>Status</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="s in surgeries">
+                            <td>{{s.lastName}}</td>
+                            <td>{{s.firsstName}}</td>
+                            <td>{{s.entryDate}}</td>
+                            <td>{{s.exitDate}}</td>
+                            <td>
+                                {{s.plannedDuration}}
+                            </td>
+                            <td>{{s.status}}</td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
